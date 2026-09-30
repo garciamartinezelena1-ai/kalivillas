@@ -25,6 +25,10 @@
   @keyframes kvSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
   @keyframes kvRise{from{transform:translateY(115%)}to{transform:translateY(0)}}
   @keyframes kvNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+  @keyframes kvMenuIn{from{clip-path:circle(0% at calc(100% - 36px) 34px)}to{clip-path:circle(150% at calc(100% - 36px) 34px)}}
+  @keyframes kvMLink{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .kv-menu{animation:kvMenuIn .75s cubic-bezier(.76,0,.24,1) both}
+  .kv-mlink{opacity:0;animation:kvMLink .7s cubic-bezier(.16,1,.3,1) forwards}
   @keyframes kvFade{from{opacity:0}to{opacity:1}}
   .kv-line{display:block;overflow:hidden;padding-bottom:.16em;margin-bottom:-.16em}
   .kv-line>span{display:block;transform:translateY(115%);animation:kvRise .95s cubic-bezier(.16,1,.3,1) forwards}
@@ -73,10 +77,12 @@
     #kvNavBar{padding:12px 14px!important;height:68px;align-items:center!important}
     #kvNav{height:44px;box-sizing:border-box;gap:10px!important;padding:0 5px 0 18px!important}
     #kvLang{padding:6px 10px!important;font-size:10px!important}
-    #kvHeroType{justify-content:flex-start!important;padding-top:24vh!important}
+    #kvBurger{display:flex!important}
+    #kvTop{display:flex!important}
+    #kvHeroType{justify-content:flex-start!important;padding-top:29vh!important}
     #kvH1{font-size:clamp(56px,15.5vw,84px)!important;line-height:.9!important}
-    #kvHeroCta{bottom:150px!important;gap:10px!important}
-    #kvHeroCta>a{padding:12px 20px!important;font-size:10px!important;letter-spacing:.16em!important}
+    #kvHeroCta{bottom:150px!important;gap:10px!important;flex-direction:column!important;align-items:center!important}
+    #kvHeroCta>a{padding:13px 20px!important;font-size:10px!important;letter-spacing:.16em!important;width:230px;text-align:center;box-sizing:border-box}
     #kvProg{display:none}
   }
 </style>
@@ -91,7 +97,7 @@
 </div>
 
 <a id="kvLogo" href="#top" data-cursor="" style="position:fixed;top:16px;left:24px;z-index:70;display:block;line-height:0">
-  <img src="uploads/LOGOS%20VILLAS_Mesa%20de%20trabajo%201%20copia%207.png" alt="Kali Villas" style="width:clamp(52px,5vw,64px);height:clamp(52px,5vw,64px);border-radius:50%;object-fit:cover;filter:drop-shadow(0 4px 16px rgba(46,30,20,.35))">
+  <img src="uploads/LOGOS%20VILLAS_Mesa%20de%20trabajo%201%20copia%207.png" alt="Kali Villas" style="width:clamp(52px,5vw,64px);height:clamp(52px,5vw,64px);border-radius:50%;object-fit:cover;box-shadow:0 4px 18px rgba(35,34,25,.28);">
 </a>
 <nav id="kvNavBar" style="position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:flex-end;padding:20px 28px;pointer-events:none">
   <div id="kvNav" style="display:flex;gap:28px;align-items:center;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#EDE6D6;font-weight:600;padding:15px 28px;border-radius:100px;background:rgba(46,30,20,.5);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(237,230,214,.22);pointer-events:auto">
@@ -102,6 +108,9 @@
     <a href="#contacto" data-cursor="" style="opacity:.85">Reservar</a>
     <button id="kvLang" onClick="{{ toggleLang }}" data-cursor="" data-kv-noi18n="" aria-label="Change language" style="display:flex;align-items:center;gap:6px;background:none;border:1px solid rgba(237,230,214,.5);border-radius:100px;padding:7px 12px;color:#EDE6D6;font-family:inherit;font-size:11px;letter-spacing:.18em;font-weight:700;cursor:pointer">
       <span style="opacity:{{ enOp }}">EN</span><span style="opacity:.4">/</span><span style="opacity:{{ esOp }}">ES</span>
+    </button>
+    <button id="kvBurger" onClick="{{ openMenu }}" aria-label="Menu" style="display:none;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border-radius:50%;background:#EDE6D6;border:none;color:#232219;cursor:pointer;font-family:inherit;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"></path></svg>
     </button>
   </div>
 </nav>
@@ -524,6 +533,67 @@
 <div id="kvProg"><i ref="{{ prog }}"></i></div>
 </div><!-- /kvViewport -->
 
+<!-- MOBILE MENU -->
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div class="kv-menu" style="position:fixed;inset:0;height:100dvh;z-index:400;background:#232219;color:#EDE6D6;display:flex;flex-direction:column;padding:12px 18px 18px;overflow:hidden;box-sizing:border-box">
+    <span style="position:absolute;right:-.08em;bottom:-.18em;font-family:var(--kv-title,'Cormorant Garamond'),serif;font-style:italic;font-size:62vw;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(237,230,214,.08);pointer-events:none">k</span>
+    <div style="position:relative;display:flex;justify-content:space-between;align-items:center;height:48px">
+      <span style="font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#C89B7B;font-weight:700">El Nido · Palawan</span>
+      <button onClick="{{ closeMenu }}" aria-label="Close" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(237,230,214,.3);background:none;color:#EDE6D6;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+
+    <div class="kv-mlink" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;animation-delay:.28s;flex:none">
+      <button onClick="{{ menuKali }}" style="position:relative;height:min(19vh,150px);border-radius:12px;overflow:hidden;border:none;padding:0;cursor:pointer;text-align:left;background:#3a352c">
+        <img src="uploads/8657a179-1397-43a1-8bf4-9c1a56780257-a6dd2cdc.jpg" alt="Bahay Kali" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,34,25,0) 45%,rgba(35,34,25,.8))"></span>
+        <span style="position:absolute;left:12px;right:12px;bottom:11px;display:flex;flex-direction:column;gap:2px;color:#EDE6D6">
+          <span style="font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#C89B7B;font-weight:700">Studio Villa</span>
+          <span style="font-family:var(--kv-title,'Cormorant Garamond'),serif;font-size:22px;line-height:1;font-weight:500">Bahay Kali</span>
+        </span>
+      </button>
+      <button onClick="{{ menuLia }}" style="position:relative;height:min(19vh,150px);border-radius:12px;overflow:hidden;border:none;padding:0;cursor:pointer;text-align:left;background:#3a352c">
+        <img src="uploads/dqs%202025-10-18%20171644.395%205.JPG" alt="Bahay Lia" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <span style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,34,25,0) 45%,rgba(35,34,25,.8))"></span>
+        <span style="position:absolute;left:12px;right:12px;bottom:11px;display:flex;flex-direction:column;gap:2px;color:#EDE6D6">
+          <span style="font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:#C89B7B;font-weight:700">One Bedroom Villa</span>
+          <span style="font-family:var(--kv-title,'Cormorant Garamond'),serif;font-size:22px;line-height:1;font-weight:500">Bahay Lia</span>
+        </span>
+      </button>
+    </div>
+
+    <div style="position:relative;display:flex;flex-direction:column;justify-content:center;margin-top:8px;flex:1;min-height:0">
+      <sc-for list="{{ menuLinks }}" as="m" hint-placeholder-count="7">
+        <a href="{{ m.href }}" onClick="{{ closeMenu }}" class="kv-mlink" style="display:flex;align-items:center;justify-content:space-between;gap:14px;padding:min(1.25vh,11px) 2px;border-bottom:1px solid rgba(237,230,214,.1);color:#EDE6D6;animation-delay:{{ m.delay }}">
+          <span style="display:flex;align-items:baseline;gap:14px">
+            <span style="font:600 10px ui-monospace,Menlo,monospace;color:#C89B7B;letter-spacing:.08em">{{ m.no }}</span>
+            <span style="font-family:var(--kv-title,'Cormorant Garamond'),serif;font-size:min(2.9vh,22px);line-height:1.1;font-weight:400">{{ m.label }}</span>
+          </span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(237,230,214,.5)" stroke-width="1.4"><path d="M7 17L17 7M9 7h8v8"></path></svg>
+        </a>
+      </sc-for>
+    </div>
+
+    <div class="kv-mlink" style="position:relative;display:flex;flex-direction:column;gap:12px;margin-top:12px;animation-delay:.72s;flex:none">
+      <a href="#contacto" onClick="{{ closeMenu }}" style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-radius:100px;background:#A24E2C;color:#EDE6D6;font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700">
+        Reservar tu estancia
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:rgba(237,230,214,.7)">
+        <a href="https://wa.me/34685387928" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/kalivillas/" target="_blank" rel="noopener">Instagram</a>
+        <button onClick="{{ toggleLang }}" style="background:none;border:1px solid rgba(237,230,214,.3);border-radius:100px;padding:7px 12px;color:#EDE6D6;font-family:inherit;font-size:10px;letter-spacing:.18em;font-weight:700;cursor:pointer"><span style="opacity:{{ enOp }}">EN</span> / <span style="opacity:{{ esOp }}">ES</span></button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- BACK TO TOP (mobile) -->
+<button id="kvTop" onClick="{{ toTop }}" aria-label="Back to top" style="position:fixed;right:16px;bottom:18px;z-index:80;width:48px;height:48px;border-radius:50%;background:#A24E2C;color:#EDE6D6;border:none;display:none;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(35,34,25,.3);cursor:pointer;padding:0;opacity:{{ topOp }};pointer-events:{{ topPe }};transition:opacity .4s">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>
+</button>
+
 <!-- LIGHTBOX -->
 <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ closeLightbox }}" style="position:fixed;inset:0;z-index:300;background:rgba(46,30,20,.94);display:flex;align-items:center;justify-content:center;padding:clamp(20px,4vw,70px);cursor:zoom-out">
@@ -763,7 +833,7 @@ class Component extends DCLogic {
     'Un refugio íntimo para parejas que buscan tranquilidad. Un estudio abierto con cama Queen, jardín privado, hamaca exterior y todo lo necesario para desconectar del mundo. Diseño mediterráneo entre la vegetación tropical, pensado para mañanas lentas y noches en silencio.':'An intimate retreat for couples seeking calm. An open studio with a Queen bed, private garden, outdoor hammock and everything you need to switch off from the world. Mediterranean design among tropical greenery, made for slow mornings and quiet nights.',
     'Una villa de un dormitorio con espacios abiertos inspirados en el Mediterráneo, rodeada de naturaleza. Dormitorio independiente, salón, bañera interior, gran terraza cubierta y jardín privado. Amplitud, luz y calma para respirar hondo y quedarse.':'A one-bedroom villa with open, Mediterranean-inspired spaces surrounded by nature. Separate bedroom, living room, indoor bathtub, large covered terrace and private garden. Space, light and calm to breathe deeply and stay a while.',
     '✓ ¡Gracias! Te responderemos muy pronto.':'✓ Thank you! We’ll get back to you very soon.',
-    'Enviando…':'Sending…','No se pudo enviar. Escríbenos por WhatsApp.':'Couldn’t send. Please message us on WhatsApp.','Desliza':'Swipe',
+    'Enviando…':'Sending…','No se pudo enviar. Escríbenos por WhatsApp.':'Couldn’t send. Please message us on WhatsApp.','Desliza':'Swipe','Descubre El Nido':'Discover El Nido','Opiniones':'Reviews','Menú':'Menu','El Nido · Palawan':'El Nido · Palawan',
   };
   _tr(key) {
     if (this.i18n[key]) return this.i18n[key];
@@ -892,6 +962,8 @@ class Component extends DCLogic {
     this._onScroll = () => {
       this._scrollY = window.scrollY;
       if (!this._horiz && this._checkReveals) this._checkReveals();
+      const st = window.scrollY > 700;
+      if (st !== !!this.state.showTop) this.setState({ showTop: st });
       const bg = this._heroBg;
       if (bg) bg.style.transform = 'translateY(' + (window.scrollY * 0.12) + 'px)';
     };
@@ -1032,6 +1104,18 @@ class Component extends DCLogic {
       },
       sentMsg: this.state.sent === 'ok' ? '✓ ¡Gracias! Te responderemos muy pronto.' : this.state.sent === 'sending' ? 'Enviando…' : this.state.sent === 'error' ? 'No se pudo enviar. Escríbenos por WhatsApp.' : '',
       airbnbOpen: !!this.state.airbnbOpen,
+      menuOpen: !!this.state.menuOpen,
+      openMenu: () => { document.body.style.overflow = 'hidden'; this.setState({ menuOpen: true }); },
+      closeMenu: () => { document.body.style.overflow = ''; this.setState({ menuOpen: false }); },
+      menuLinks: [
+        ['Galería', '#galeria'], ['Experiencias', '#experiencias'], ['Localización', '#localizacion'], ['Servicios', '#servicios'],
+        ['Descubre El Nido', '#descubre'], ['Opiniones', '#opiniones'], ['FAQ', '#faq'], ['Nuestra historia', '#historia'],
+      ].map((l, i) => ({ no: String(i + 1).padStart(2, '0'), label: l[0], href: l[1], delay: (0.36 + i * 0.045).toFixed(2) + 's' })),
+      menuKali: () => { this.setState({ menuOpen: false, villaPage: 'kali' }); document.body.style.overflow = 'hidden'; window.scrollTo(0, 0); },
+      menuLia: () => { this.setState({ menuOpen: false, villaPage: 'lia' }); document.body.style.overflow = 'hidden'; window.scrollTo(0, 0); },
+      topOp: this.state.showTop ? '1' : '0',
+      topPe: this.state.showTop ? 'auto' : 'none',
+      toTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
       toggleAirbnb: () => this.setState(s => ({ airbnbOpen: !s.airbnbOpen })),
     };
   }
